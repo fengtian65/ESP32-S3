@@ -1,96 +1,156 @@
 # ESP32-S3 教学资产
+
 本仓库包含 ESP32-S3 从入门到进阶的完整教学资源，包括例程代码、教学 PPT 和配套视频，适合电子信息类学生或嵌入式爱好者学习使用。
 
 ---
 
-### 🏢 关于我们
+## 🏢 关于我们
+
 **AI融创创新实验室**是**中北大学仪器与电子学院创新精英研究院**旗下的科创实践平台，于**2025年5月8日**正式成立。实验室以“人工智能与AI+”为核心发展方向，聚焦**AI+嵌入式**、**AIGC**、**前沿探索**三大领域，致力于推动AI技术与传统工科的交叉融合，培养兼具创新思维与工程实践能力的复合型人才。
 
 自成立以来，实验室已累计举办多期AI主题工作坊与技术培训，覆盖嵌入式开发、大模型应用、生成式AI等前沿方向，吸引了校内外众多爱好者参与。目前实验室拥有成员70余人，涵盖仪器与电子、计算机、自动化等多个学科，形成了跨专业、梯队化的科创团队。
 
-实验室高度重视教学资源的沉淀与开源共享，此次推出的**ESP32-S3教学资产**便是实验室在“AI+嵌入式”方向的重要成果之一。同时，实验室在bilibili等平台同步发布配套教学视频（账号：**AI融创创新实验室**），结合AtomGit开源代码与CSDN文字教程，打造“理论-实践-拓展”三位一体的学习体系，助力更多零基础学习者快速入门嵌入式与AI开发。
+实验室高度重视教学资源的沉淀与开源共享，此次推出的**ESP32-S3教学资产**便是实验室在“AI+嵌入式”方向的重要成果之一。同时，实验室在bilibili等平台同步发布配套教学视频（账号：**AI融创创新实验室**），结合GitCode开源代码与CSDN文字教程，打造“理论-实践-拓展”三位一体的学习体系，助力更多零基础学习者快速入门嵌入式与AI开发。
 
 未来，实验室将继续深耕AI+领域，持续推出更多优质教学资源与科创项目，积极探索前沿技术在工程实践中的应用，为人工智能与实体经济的深度融合贡献力量。
 
 ---
 
 ## 📂 目录结构
+
 ```
 ESP32-S3/
-├── examples/          # 例程项目代码
-│   ├── 01-LED/               # 点亮第一个 LED
-│   ├── 02-LED_blink/         # LED 闪烁
-│   ├── 03-Buzzer/            # 蜂鸣器控制
-│   ├── 04-Button/            # 按键输入
-│   ├── 05-interrupt1/        # 外部中断（基础）
-│   ├── 06-interrupt2/        # 外部中断（进阶）
-│   ├── 07-timer/             # 定时器使用
-│   ├── tem/  # 温湿度采集+扣子AI智能体实战
-│   ├── OLED1(developing)/    # OLED 驱动（开发中）
-│   └── WIFI(developing)/     # WiFi 功能（开发中）
-├── PPT/               # 教学幻灯片
+├── examples/              # 基础例程项目代码
+│   ├── 01-LED/           # 点亮第一个 LED
+│   ├── 02-LED_blink/     # LED 流水灯
+│   ├── 03-Buzzer/        # 蜂鸣器与FreeRTOS多任务协同
+│   ├── 04-Button/        # GPIO输入/按键控制LED
+│   ├── 05-interrupt1/    # 按键中断1（基础）
+│   ├── 06-interrupt2/    # 按键中断2（FreeRTOS进阶）
+│   ├── 07-timer/         # 硬件定时器
+│   ├── 08-PWM/           # PWM呼吸灯
+│   ├── 09-UART/          # UART串口通信
+│   ├── OLED1(developing)/# OLED 屏驱动（开发中）
+│   └── WIFI(developing)/ # WiFi 联网功能（开发中）
+├── introduce/            # 实验室介绍文档
+│   └── README.md         # 实验室介绍文档
+├── PPT/                  # 配套教学幻灯片
 │   ├── 0课程介绍.pptx
 │   ├── 1开发环境搭建.pptx
-│   └── 2-GPIO输出.pptx
-└── videos/            # 教学视频（见下方链接）
+│   └── 2-GPIO输出（点亮一个LED）.pptx
+├── project/              # 进阶实战项目
+│   └── tem/              # 温湿度采集+扣子AI智能体实战项目
+├── LICENSE               # 开源协议
+└── README.md             # 项目主说明文档
 ```
 
+---
+
 ## 🛠️ 硬件要求
-- 开发板：ESP32-S3 核心板（推荐 ESP32-S3-DevKitC-1）
-- 基础元器件：LED、按键、蜂鸣器、OLED 屏（SSD1306）、杜邦线若干
-- 进阶项目元器件：DHT11温湿度传感器
-- 调试器：USB 数据线（支持数据传输）
+
+- **开发板**：ESP32-S3 核心板（推荐 ESP32-S3-DevKitC-1）
+- **基础元器件**：LED、按键、蜂鸣器、OLED 屏（SSD1306）、杜邦线若干
+- **进阶项目元器件**：DHT11温湿度传感器
+- **调试器**：USB 数据线（支持数据传输）
+
+---
 
 ## 💻 软件环境
-- 操作系统：Windows 10/11、macOS 或 Linux
-- 开发框架：ESP-IDF v5.0+
-- 编辑器：VS Code + ESP-IDF 插件
+
+- **操作系统**：Windows 10/11、macOS 或 Linux
+- **开发框架**：ESP-IDF v5.0+
+- **编辑器**：VS Code + ESP-IDF 插件
+
+---
 
 ## 🚀 快速开始
-1. **克隆仓库**
-	```
-	git clone https://gitcode.com/fengtian65/ESP32-S3.git
-	cd ESP32-S3
-	```
 
-2. **编译与烧录（重要操作说明）**
-> ⚠️ **核心注意事项**：ESP-IDF 为单工程编译架构，**必须进入 `examples` 目录下的单个例程文件夹内执行编译、烧录操作**，禁止在仓库根目录直接操作。
+### 1. 克隆仓库
+```bash
+git clone https://gitcode.com/NUCAILab/ESP32-S3.git
+cd ESP32-S3
+```
+
+### 2. 编译与烧录（重要操作说明）
+
+> ⚠️ **核心注意事项**：ESP-IDF 为单工程编译架构，**必须进入 `examples` 目录下的单个例程文件夹 或 `project` 目录下的实战项目文件夹内执行编译、烧录操作**，禁止在仓库根目录直接操作。
 
 确保已在 VS Code 中安装并配置好**ESP-IDF 插件**，按以下步骤操作：
-	1. **打开目标例程**：在 VS Code 中通过「文件-打开文件夹」，选择 `examples` 目录下的单个例程文件夹（如`examples/01-LED/`），等待 ESP-IDF 插件自动加载工程。
-	2. **选择串口**：点击 VS Code 底部状态栏的「插头图标」（或「选择串口端口」文字），在弹出列表中选择你的 ESP32-S3 连接的端口（Windows 常见`COM3` /`COM4` ，Mac/Linux 常见`/dev/ttyUSB0` ）。
-	3. **选择目标芯片**：点击底部状态栏的「芯片型号」，在弹出列表中选择`ESP32-S3`。
-	4. **编译工程**：点击底部状态栏的「✓ 编译」图标（或按`Ctrl+E` 再按`B` ），等待编译完成（底部终端会显示「Build complete」）。
-	5. **烧录程序**：点击底部状态栏的「🔥 烧录」图标（或按`Ctrl+E` 再按`F` ），插件会自动将程序烧录到 ESP32-S3。
-	6. **打开串口监视器**：点击底部状态栏的「🖥️ 监视器」图标（或按`Ctrl+E` 再按`M` ），即可查看程序运行日志。
+
+1. **打开目标工程**：在 VS Code 中通过「文件-打开文件夹」，选择 `examples` 目录下的单个例程文件夹（如 `examples/01-LED/`）或 `project` 目录下的实战项目文件夹（如 `project/tem/`），等待 ESP-IDF 插件自动加载工程。
+2. **选择串口**：点击 VS Code 底部状态栏的「插头图标」（或「选择串口端口」文字），在弹出列表中选择你的 ESP32-S3 连接的端口（Windows 常见 `COM3` / `COM4`，Mac/Linux 常见 `/dev/ttyUSB0`）。
+3. **选择目标芯片**：点击底部状态栏的「芯片型号」，在弹出列表中选择 `ESP32-S3`。
+4. **编译工程**：点击底部状态栏的「✓ 编译」图标（或按 `Ctrl+E` 再按 `B`），等待编译完成（底部终端会显示「Build complete」）。
+5. **烧录程序**：点击底部状态栏的「🔥 烧录」图标（或按 `Ctrl+E` 再按 `F`），插件会自动将程序烧录到 ESP32-S3。
+6. **打开串口监视器**：点击底部状态栏的「🖥️ 监视器」图标（或按 `Ctrl+E` 再按 `M`），即可查看程序运行日志。
+
+---
 
 ### 进阶项目：温湿度AI生活建议 额外配置说明
+
 该项目需要额外配置WiFi信息和扣子智能体参数：
-1.  进入`examples/tem/`	文件夹，打开`main/main.c`
-2.  修改配置区的`WIFI_SSID`（WiFi名称）、`WIFI_PASS`（WiFi密码）、`COZE_TOKEN`（扣子平台API Token）
-3.  硬件接线参考：
-    | 外设 | ESP32-S3 引脚 |
-    | :--- | :--- |
-    | DHT11 DATA | GPIO 4 |
-    | 触发按键（BOOT） | GPIO 0 |
-4.  按下开发板BOOT按键，即可触发温湿度采集、上传AI智能体、串口打印生活建议。
+
+1. 进入 `project/tem/` 文件夹，打开 `main/main.c`
+2. 修改配置区的 `WIFI_SSID`（WiFi名称）、`WIFI_PASS`（WiFi密码）、`COZE_TOKEN`（扣子平台API Token）
+3. **硬件接线参考**：
+   | 外设              | ESP32-S3 引脚 |
+   | :---------------- | :------------ |
+   | DHT11 DATA        | GPIO 4        |
+   | 触发按键（BOOT）  | GPIO 0        |
+4. 按下开发板BOOT按键，即可触发温湿度采集、上传AI智能体、串口打印生活建议。
+
+---
 
 ## 📖 配套文字版教程
+
 本系列课程配套完整的文字版保姆级教程已同步发布至CSDN，内容与仓库例程代码、教学视频一一对应，包含详细的原理讲解、硬件接线图示、逐行代码解析和新手常见问题排查，既可以跟着课程逐节学习，也可作为日常开发的查阅手册。
-专栏合集地址：[ESP32-S3开发教程](https://blog.csdn.net/fengtian65/category_13080617.html)
+
+**专栏合集地址**：[ESP32-S3开发教程](https://blog.csdn.net/fengtian65/category_13080617.html)
+
+**已发布教程列表**：
+- [ESP32_S3开发环境搭建教程（VS Code+ESP-IDF）](https://blog.csdn.net/fengtian65/article/details/...)
+- [ESP32-S3开发教程一：点亮一个LED（基于VS Code+ESP-IDF）](https://blog.csdn.net/fengtian65/article/details/...)
+- [ESP32-S3开发教程二：LED流水灯（基于VS Code+ESP-IDF）](https://blog.csdn.net/fengtian65/article/details/...)
+- [ESP32-S3开发教程三：蜂鸣器与FreeRTOS多任务协同](https://blog.csdn.net/fengtian65/article/details/...)
+- [ESP32-S3开发教程四：GPIO输入/按键控制LED](https://blog.csdn.net/fengtian65/article/details/...)
+- [ESP32-S3开发教程五-按键中断1](https://blog.csdn.net/fengtian65/article/details/...)
+- [ESP32-S3开发教程五-按键中断2（使用FreeRTOS）](https://blog.csdn.net/fengtian65/article/details/...)
+- [ESP32-S3开发教程6：硬件定时器](https://blog.csdn.net/fengtian65/article/details/...)
+- [ESP32-S3开发教程7：PWM呼吸灯](https://blog.csdn.net/fengtian65/article/details/...)
+
+---
 
 ## 📺 教学视频
+
 所有配套教学视频已上传至bilibili，点击下方链接观看：
+
 - [第0章：课程介绍](https://www.bilibili.com/video/BV1z2c4zfEPE/)
 - [第1章：开发环境搭建](https://www.bilibili.com/video/BV1z2c4zfEFc/)
 - _（持续更新中）_
 
+---
+
 ## 📝 更新日志
-- 2026-02-24：新增「DHT11温湿度采集+扣子Coze智能体」进阶实战例程，修复基础例程若干bug，完善README编译烧录操作说明
-- 2026-02-16：初始化仓库，添加 LED、按键、蜂鸣器等基础例程
+
+- **2026-03-XX**：新增「UART串口通信」例程，优化项目目录结构，拆分基础例程与进阶实战项目
+- **2026-03-02**：新增「PWM呼吸灯」例程与配套教程
+- **2026-02-24**：新增「DHT11温湿度采集+扣子Coze智能体」进阶实战项目，修复基础例程若干bug，完善README编译烧录操作说明
+- **2026-02-16**：新增「硬件定时器」例程与教程；初始化仓库，添加 LED、按键、蜂鸣器等基础例程
+- **2026-02-13**：新增「按键中断（FreeRTOS进阶）」例程与教程
+- **2026-02-01**：新增「按键中断（基础）」例程与教程
+- **2026-01-17**：新增「GPIO输入/按键控制LED」例程与教程
+- **2026-01-16**：新增「蜂鸣器与FreeRTOS多任务协同」、「LED流水灯」例程与教程
+- **2026-01-15**：新增「点亮一个LED」例程与教程
+- **2025-11-05**：发布「ESP32-S3开发环境搭建教程」
+
+---
 
 ## 🤝 贡献
+
 欢迎提交 Issue 或 Pull Request 来完善本教程！
 
+---
+
 ## 📄 许可证
+
 本项目采用 [MIT License](LICENSE) 开源协议。
