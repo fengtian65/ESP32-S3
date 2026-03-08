@@ -12,6 +12,9 @@
 #include "esp_wifi.h"
 #include "esp_timer.h"  // 新增：引入esp_timer头文件（解决esp_timer_get_time报错）
 #include "lwip/netdb.h"
+#include <stdbool.h>   // 使用 bool 类型
+#include <stdlib.h>    // malloc, realloc, free
+#include <string.h>    // memcpy, strcmp, strncmp
 
 // 引入拆分后的驱动头文件
 #include "wifi_conn.h"
@@ -129,7 +132,7 @@ static void check_network_connectivity(const char* host, uint16_t port) {
     }
 }
 static void coze_send_request(float temp, float humid) {
-    // 1. 前置检查
+    // 1. 前置检查（保持不变）
     if (COZE_TOKEN == NULL || strlen(COZE_TOKEN) == 0) {
         ESP_LOGE(TAG, "Coze Error: Token为空");
         return;
@@ -139,20 +142,21 @@ static void coze_send_request(float temp, float humid) {
         return;
     }
 
+    // 可选：测试连通性
     test_tcp_connect("www.baidu.com", 80);
-    check_network_connectivity("4npkk23hhg.coze.site", 443); // Coze域名+HTTPS端口
+    check_network_connectivity("4npkk23hhg.coze.site", 443);
 
     // 2. 生成提示词
     char prompt_text[128] = {0};
     snprintf(prompt_text, sizeof(prompt_text), "温度:%.1f℃,湿度:%.1f%%。请给出生活建议。", temp, humid);
     ESP_LOGI(TAG, "Coze prompt: %s", prompt_text);
 
-    // 3. 构建JSON请求体（和Python完全一致）
-    cJSON *root = cJSON_CreateObject();          
-    cJSON *content = cJSON_CreateObject();       
-    cJSON *query = cJSON_CreateObject();         
-    cJSON *prompt_array = cJSON_CreateArray();   
-    cJSON *prompt_item = cJSON_CreateObject();   
+    // 3. 构建JSON请求体
+    cJSON *root = cJSON_CreateObject();
+    cJSON *content = cJSON_CreateObject();
+    cJSON *query = cJSON_CreateObject();
+    cJSON *prompt_array = cJSON_CreateArray();
+    cJSON *prompt_item = cJSON_CreateObject();
     cJSON *prompt_content = cJSON_CreateObject();
 
     cJSON_AddStringToObject(prompt_content, "text", prompt_text);
@@ -174,22 +178,22 @@ static void coze_send_request(float temp, float humid) {
         return;
     }
 
-    // 4. HTTP客户端配置（核心：防阻塞 + 短超时）
+    // 4. HTTP客户端配置（使用分步API）
     esp_http_client_config_t config = {
-    .url = COZE_URL,
-    .method = HTTP_METHOD_POST,
-    .timeout_ms = 15000,                // 连接超时从8s增至15s
-    .buffer_size = 4096,                // 增大缓冲区
-    .buffer_size_tx = 4096,
-    .user_agent = "ESP32S3/1.0",
-    .keep_alive_enable = true,         //长连接
-    .skip_cert_common_name_check = true,
-    .disable_auto_redirect = true,
-    .event_handler = http_event_handler,
-    .max_redirection_count = 0,
-    .use_global_ca_store = false,
-    .cert_pem = NULL, // 不加载自定义证书
-    .port = 443,
+        .url = COZE_URL,
+        .method = HTTP_METHOD_POST,
+        .timeout_ms = 15000,
+        .buffer_size = 4096,
+        .buffer_size_tx = 4096,
+        .user_agent = "ESP32S3/1.0",
+        .keep_alive_enable = true,
+        .skip_cert_common_name_check = true,
+        .disable_auto_redirect = true,
+        .event_handler = http_event_handler,
+        .max_redirection_count = 0,
+        .use_global_ca_store = false,
+        .cert_pem = NULL,
+        .port = 443,
     };
 
     esp_http_client_handle_t client = esp_http_client_init(&config);
@@ -200,25 +204,32 @@ static void coze_send_request(float temp, float humid) {
         return;
     }
 
-    // 5. 设置请求头（和Python脚本100%对齐）
+    // 5. 设置请求头
     char auth_header[1024] = {0};
     snprintf(auth_header, sizeof(auth_header), "Bearer %s", COZE_TOKEN);
     esp_http_client_set_header(client, "Host", "4npkk23hhg.coze.site");
     esp_http_client_set_header(client, "Authorization", auth_header);
     esp_http_client_set_header(client, "Content-Type", "application/json");
-    esp_http_client_set_header(client, "Accept", "text/event-stream");    // 关键：指定SSE格式
+    esp_http_client_set_header(client, "Accept", "text/event-stream");
     esp_http_client_set_header(client, "Cache-Control", "no-cache");
-    esp_http_client_set_header(client, "Connection", "keep-alive");             // 关键：用完关闭连接
+    esp_http_client_set_header(client, "Connection", "keep-alive");
 
-    // 6. 设置POST数据并发送请求
-    esp_http_client_set_post_field(client, post_data, strlen(post_data));
-    esp_err_t err = esp_http_client_perform(client);
+    // 6. 分步式请求
+    esp_err_t err = esp_http_client_open(client, strlen(post_data));
     if (err != ESP_OK) {
-        ESP_LOGE(TAG, "请求发送失败: %s", esp_err_to_name(err));
+        ESP_LOGE(TAG, "esp_http_client_open 失败: %s", esp_err_to_name(err));
         goto cleanup;
     }
 
-    // 7. 检查响应状态码
+    int written = esp_http_client_write(client, post_data, strlen(post_data));
+    if (written != strlen(post_data)) {
+        ESP_LOGE(TAG, "请求体发送不完整, 写入 %d 字节", written);
+        goto cleanup;
+    }
+
+    int content_length = esp_http_client_fetch_headers(client);
+    ESP_LOGI(TAG, "Content-Length: %d", content_length);
+
     int status_code = esp_http_client_get_status_code(client);
     ESP_LOGI(TAG, "Coze响应状态码: %d", status_code);
     if (status_code != 200) {
@@ -226,54 +237,118 @@ static void coze_send_request(float temp, float humid) {
         goto cleanup;
     }
 
-    // 8. 核心：流式读取SSE数据（防卡死 + 20秒超时）
+    // 7. 读取响应体（SSE流式数据）
 printf("\n========== Coze智能体回复 ==========\n");
-char read_buf[256] = {0};
-int total_read = 0;
-int64_t start_time = esp_timer_get_time() / 1000;  // 记录开始时间（毫秒）
 
-while (1) {
-    // 超时保护：从10秒增至20秒，适配服务端响应速度
+char read_buf[256];
+int total_read = 0;
+int64_t start_time = esp_timer_get_time() / 1000;
+
+// 动态字符串用于累积最终答案
+char *full_answer = malloc(1);
+if (!full_answer) {
+    ESP_LOGE(TAG, "内存分配失败");
+    goto cleanup;
+}
+full_answer[0] = '\0';
+size_t answer_len = 0;
+size_t answer_cap = 1;
+
+// 行缓冲区（处理SSE按行分割）
+char line_buf[512];
+int line_len = 0;
+bool done_received = false;
+
+while (!done_received) {
     int64_t current_time = esp_timer_get_time() / 1000;
     if (current_time - start_time > 20000) {
         ESP_LOGW(TAG, "SSE读取超时（20秒）");
         break;
     }
 
-    // 单次读取128字节，预留1字节给字符串结束符
     int read_len = esp_http_client_read(client, read_buf, sizeof(read_buf) - 1);
-    ESP_LOGD(TAG, "SSE单次读取长度: %d", read_len); // 新增：打印读取长度，排查问题
-
     if (read_len > 0) {
-        read_buf[read_len] = '\0';  // 确保字符串结束
         total_read += read_len;
-        
-        // 直接打印原始数据（不做复杂解析，避免卡死）
-        printf("%s", read_buf);
-        fflush(stdout);  // 强制刷新输出，立刻显示
-        
-        // 检测结束标记 [DONE]，收到后立即退出
-        if (strstr(read_buf, "[DONE]")) {
-            ESP_LOGI(TAG, "收到结束标记，停止读取");
+        for (int i = 0; i < read_len; i++) {
+            char c = read_buf[i];
+            if (c == '\n') {
+                // 遇到换行，处理当前行
+                if (line_len > 0) {
+                    line_buf[line_len] = '\0';
+                    // 检查是否为 data: 开头
+                    if (strncmp(line_buf, "data: ", 6) == 0) {
+                        char *data = line_buf + 6;
+                        // 检查是否结束标记
+                        if (strcmp(data, "[DONE]") == 0) {
+                            ESP_LOGI(TAG, "收到结束标记 [DONE]");
+                            done_received = true;
+                            break;
+                        } else {
+                            // 解析 JSON，提取 content.answer
+                            cJSON *root = cJSON_Parse(data);
+                            if (root) {
+                                cJSON *content = cJSON_GetObjectItem(root, "content");
+                                if (content) {
+                                    cJSON *answer = cJSON_GetObjectItem(content, "answer");
+                                    if (answer && cJSON_IsString(answer)) {
+                                        const char *ans_str = answer->valuestring;
+                                        size_t ans_len = strlen(ans_str);
+                                        // 确保 full_answer 有足够空间
+                                        if (answer_cap <= answer_len + ans_len + 1) {
+                                            answer_cap = answer_len + ans_len + 1024;
+                                            char *new_ptr = realloc(full_answer, answer_cap);
+                                            if (!new_ptr) {
+                                                ESP_LOGE(TAG, "realloc 失败");
+                                                cJSON_Delete(root);
+                                                goto cleanup;
+                                            }
+                                            full_answer = new_ptr;
+                                        }
+                                        memcpy(full_answer + answer_len, ans_str, ans_len);
+                                        answer_len += ans_len;
+                                        full_answer[answer_len] = '\0';
+                                    }
+                                }
+                                cJSON_Delete(root);
+                            }
+                        }
+                    }
+                    line_len = 0; // 重置行缓冲区
+                }
+                if (done_received) break;
+            } else {
+                // 非换行符，累积到行缓冲区
+                if (line_len < (int)sizeof(line_buf) - 1) {
+                    line_buf[line_len++] = c;
+                } else {
+                    ESP_LOGW(TAG, "行过长，截断");
+                    line_len = 0;
+                }
+            }
+        } // for
+    } else if (read_len == 0) {
+        // 无数据，检查是否所有数据已读完
+        if (esp_http_client_is_complete_data_received(client)) {
+            ESP_LOGI(TAG, "所有数据接收完毕");
             break;
         }
-
-        memset(read_buf, 0, sizeof(read_buf));  // 清空缓冲区
-    } else if (read_len == 0) {
-        // 无数据时等待50ms，减少空轮询（原20ms太频繁）
-        vTaskDelay(pdMS_TO_TICKS(50));
+        vTaskDelay(pdMS_TO_TICKS(10));
     } else {
-        // 读取错误，打印具体错误码
         ESP_LOGE(TAG, "SSE读取错误，错误码: %d", read_len);
         break;
     }
 }
 
-    printf("\n========== 回复结束 ==========\n");
-    ESP_LOGI(TAG, "SSE读取完成，累计读取: %d字节", total_read);
+// 输出最终答案
+printf("\n========== Coze智能体完整回复 ==========\n");
+printf("%s\n", full_answer);
+printf("========== 回复结束 ==========\n");
+ESP_LOGI(TAG, "SSE读取完成，累计读取: %d字节", total_read);
+
+// 释放动态字符串
+free(full_answer);
 
 cleanup:
-    // 资源清理
     esp_http_client_cleanup(client);
     free(post_data);
     cJSON_Delete(root);
