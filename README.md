@@ -30,6 +30,8 @@ ESP32-S3/
 │   ├── 07-timer/         # 硬件定时器
 │   ├── 08-PWM/           # PWM呼吸灯
 │   ├── 09-UART/          # UART串口通信
+│   ├── 10-using-tem/     # DHT11温湿度传感器基础数据读取
+│   ├── ESP-DL-test/      # ESP-DL深度学习库基础测试例程
 │   ├── OLED1(developing)/# OLED 屏驱动（开发中）
 │   └── WIFI(developing)/ # WiFi 联网功能（开发中）
 ├── introduce/            # 实验室介绍文档
@@ -44,7 +46,9 @@ ESP32-S3/
 │       ├── coze_api.c/h  # Coze智能体API调用（流式SSE解析）模块
 │       ├── dht11.c/h     # DHT11温湿度采集模块
 │       ├── main.c        # 主任务调度（WiFi+按键+温湿度+API整合）
+│       ├── test.py       # Coze API本地可用性验证脚本
 │       └── wifi_conn.c/h # WiFi连接与重连模块
+├── esp-dl/               # ESP-DL深度学习库官方依赖文件
 ├── LICENSE               # 开源协议
 └── README.md             # 项目主说明文档
 ```
@@ -55,7 +59,7 @@ ESP32-S3/
 
 - **开发板**：ESP32-S3 核心板（推荐 ESP32-S3-DevKitC-1）
 - **基础元器件**：LED、按键、蜂鸣器、OLED 屏（SSD1306）、杜邦线若干
-- **进阶项目元器件**：DHT11温湿度传感器（tem项目专用）、轻触按键（或直接使用开发板BOOT键）
+- **温湿度相关例程元器件**：DHT11温湿度传感器（10-using-tem、tem项目专用）、轻触按键（或直接使用开发板BOOT键）
 - **调试器**：USB 数据线（支持数据传输）
 
 ---
@@ -66,7 +70,7 @@ ESP32-S3/
 - **开发框架**：ESP-IDF v5.0+
 - **编辑器**：VS Code + ESP-IDF 插件
 - **辅助工具**：Python3（用于验证Coze API可用性）、串口助手（波特率115200）
-- **平台依赖**：Coze（扣子）平台账号（需完成智能体创建、沙箱部署）
+- **平台依赖**：Coze（扣子）平台账号（tem项目专用，需完成智能体创建、沙箱部署）
 
 ---
 
@@ -93,7 +97,7 @@ cd ESP32-S3
 
 ### 3. 进阶项目：温湿度AI生活建议 配置与使用说明
 
-该项目实现「DHT11温湿度采集 → WiFi联网 → 按键触发Coze AI智能体请求 → 串口打印生活建议」全流程，需完成以下配置：
+该项目实现「DHT11温湿度采集 → WiFi联网 → 按键触发Coze AI智能体请求 → 串口打印生活建议」全流程，完整保姆级使用教程可参考配套CSDN文档：[ESP32-S3实战教程：温湿度采集+Coze AI智能体全流程开发](https://blog.csdn.net/fengtian65/article/details/158932785?spm=1001.2014.3001.5501)
 
 #### 3.1 核心配置修改
 进入 `project/tem/` 文件夹，修改以下文件中的关键参数：
@@ -134,16 +138,17 @@ cd ESP32-S3
 **专栏合集地址**：[ESP32-S3开发教程](https://blog.csdn.net/fengtian65/category_13080617.html)
 
 **已发布教程列表**：
-- [ESP32_S3开发环境搭建教程（VS Code+ESP-IDF）](https://blog.csdn.net/fengtian65/article/details/...)
-- [ESP32-S3开发教程一：点亮一个LED（基于VS Code+ESP-IDF）](https://blog.csdn.net/fengtian65/article/details/...)
-- [ESP32-S3开发教程二：LED流水灯（基于VS Code+ESP-IDF）](https://blog.csdn.net/fengtian65/article/details/...)
-- [ESP32-S3开发教程三：蜂鸣器与FreeRTOS多任务协同](https://blog.csdn.net/fengtian65/article/details/...)
-- [ESP32-S3开发教程四：GPIO输入/按键控制LED](https://blog.csdn.net/fengtian65/article/details/...)
-- [ESP32-S3开发教程五-按键中断1](https://blog.csdn.net/fengtian65/article/details/...)
-- [ESP32-S3开发教程五-按键中断2（使用FreeRTOS）](https://blog.csdn.net/fengtian65/article/details/...)
-- [ESP32-S3开发教程6：硬件定时器](https://blog.csdn.net/fengtian65/article/details/...)
-- [ESP32-S3开发教程7：PWM呼吸灯](https://blog.csdn.net/fengtian65/article/details/...)
-- [ESP32-S3开发教程8：UART串口通信](https://blog.csdn.net/fengtian65/article/details/...)
+- [ESP32_S3开发环境搭建教程（VS Code+ESP-IDF）](https://blog.csdn.net/fengtian65/article/details/154435731)
+- [ESP32-S3开发教程一：点亮一个LED（基于VS Code+ESP-IDF）](https://blog.csdn.net/fengtian65/article/details/156945047)
+- [ESP32-S3开发教程二：LED流水灯（基于VS Code+ESP-IDF）](https://blog.csdn.net/fengtian65/article/details/156990542)
+- [ESP32-S3开发教程三：蜂鸣器与FreeRTOS多任务协同](https://blog.csdn.net/fengtian65/article/details/157022610)
+- [ESP32-S3开发教程四：GPIO输入/按键控制LED](https://blog.csdn.net/fengtian65/article/details/157060861)
+- [ESP32-S3开发教程五-按键中断1](https://blog.csdn.net/fengtian65/article/details/157618867)
+- [ESP32-S3开发教程五-按键中断2（使用FreeRTOS）](https://blog.csdn.net/fengtian65/article/details/157844582)
+- [ESP32-S3开发教程6：硬件定时器](https://blog.csdn.net/fengtian65/article/details/158100984)
+- [ESP32-S3开发教程7：PWM呼吸灯](https://blog.csdn.net/fengtian65/article/details/158541436)
+- [ESP32-S3开发教程8：UART串口通信](https://blog.csdn.net/fengtian65/article/details/158582354)
+- [ESP32-S3开发教程9：扣子智能体快速搭建与API调用例程使用讲解](https://blog.csdn.net/fengtian65/article/details/158932785)
 
 ---
 
@@ -159,6 +164,7 @@ cd ESP32-S3
 
 ## 📝 更新日志
 
+- **2026-03-11**：新增`10-using-tem`温湿度基础读取例程、`ESP-DL-test`深度学习测试例程；补充温湿度AI实战项目完整CSDN使用教程；更新项目目录结构，补全仓库文件层级说明
 - **2026-03-08**：完善`project/tem`温湿度AI项目文档，补充配置说明、硬件接线、排错技巧
 - **2026-03-06**：新增「UART串口通信」例程，优化项目目录结构，拆分基础例程与进阶实战项目
 - **2026-03-02**：新增「PWM呼吸灯」例程与配套教程
