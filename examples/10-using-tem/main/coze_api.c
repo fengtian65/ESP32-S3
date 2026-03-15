@@ -14,10 +14,10 @@
 static const char *TAG = "COZE_API";
 
 // ========== 配置常量（可在此修改）==========
-#define COZE_URL       "https://cfq6w5hsx2.coze.site/stream_run"
+#define COZE_URL       "https://pcgrcsptjq.coze.site/stream_run"
 #define COZE_SESSION   "ESP32_S3_CUSTOM_SESSION_001"
-#define COZE_PROJECT   "7615961230754332726"
-static const char *COZE_TOKEN = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjU2ODIxODVhLWU0NjQtNGYxZi04Y2JmLTdiNzM3MTE4Njg1MSJ9.eyJpc3MiOiJodHRwczovL2FwaS5jb3plLmNuIiwiYXVkIjpbImFPdkpUb0JsMExNZUY2OHRLQko1aEpRclh0UVZSbGtJIl0sImV4cCI6ODIxMDI2Njg3Njc5OSwiaWF0IjoxNzczMjMzMTIzLCJzdWIiOiJzcGlmZmU6Ly9hcGkuY296ZS5jbi93b3JrbG9hZF9pZGVudGl0eS9pZDo3NjE1OTY0ODM4NDg0NzcwODU4Iiwic3JjIjoiaW5ib3VuZF9hdXRoX2FjY2Vzc190b2tlbl9pZDo3NjE1OTc4Mjc0NjIzMDYyMDUxIn0.foTG6gOOVQI9q28XY4gRbfX6-MrGe8uZ0Gc8b1qYmd8tNt8STcjvekn4ex67U7xygqyCEQH7e3cvQMyxylZOHxSScrkfMdzX3SLE4ZSzx3cVuvCLOjT49Iqv8mc7FLQbtyO0e1K0cH_HcS6w0GbP4Ch_q3hIIHHSDp3hFcEncZFrMD_uLcIYaK9KYWjC0yx1hL53uSNeNG9a7Jj00BJJ5YRlLgwoVvAHH5586C4I_wjiT1Bm5q3C1ZTU0I6EPHSXQtNJluCbrU_wjzbpZsz1Rx0-IbUWnb7Dd-KpSrVehyHQhKSjTPEluxqWqrK-Jt1F1TXLVXuEKaTBpFUo9N5VZA";
+#define COZE_PROJECT   "7616311002971521087"
+static const char *COZE_TOKEN = "eyJhbGciOiJSUzI1NiIsImtpZCI6Ijg4OTdjOGE0LTc5ZDEtNDI0My04ZmZmLTRhNjQzNDgwYjRhNCJ9.eyJpc3MiOiJodHRwczovL2FwaS5jb3plLmNuIiwiYXVkIjpbInJLSFJuNmo3Q3FQZmtKVkJGOWg5SWFCVzNNWkluNkY1Il0sImV4cCI6ODIxMDI2Njg3Njc5OSwiaWF0IjoxNzczMzEyNjQ4LCJzdWIiOiJzcGlmZmU6Ly9hcGkuY296ZS5jbi93b3JrbG9hZF9pZGVudGl0eS9pZDo3NjE2MzE3MDYxNDIxMDcyNDAzIiwic3JjIjoiaW5ib3VuZF9hdXRoX2FjY2Vzc190b2tlbl9pZDo3NjE2MzE5ODI5NDQzNjA4NjI2In0.AuVW5O8hwAHRK8pK438a_JHSMZTbfmemntjpoKopKVn6LZZeoxaWRe7helMaHkFnpXd6Woiw4e9YUobaS0V94kPp9TbBhYxns1a24QeKUfg3pdRLrHF5vojAdonVGZ_PuuzZPyydpeRWKcTG53y6PQVmOCufyejNuZjVHR_4xPU1hUldmssc08XYfg7ZuRDgm_l1scSESqcLEUFVzT2Nds9Nqgw5n_3ZqVVo7PorNQCzQU61s61s8gxYy2dRMzW1ApfRent2J-ktze_VogYwum4o1RRJtDGDWctDWgh5pmX0_dhZnknxlifhGdDlFIpUzXhLJYmVBqdjg23ffWAWHA";
 // ========== 内部函数声明 ==========
 static esp_err_t http_event_handler(esp_http_client_event_t *evt);
 static void test_tcp_connect(const char *host, uint16_t port);
@@ -115,8 +115,8 @@ void coze_send_request(float temp, float humid) {
     }
 
     // 可选：测试连通性
-    test_tcp_connect("www.baidu.com", 80);
-    check_network_connectivity("cfq6w5hsx2.coze.site", 443);
+    //test_tcp_connect("www.baidu.com", 80);
+    //check_network_connectivity("cfq6w5hsx2.coze.site", 443);
 
     // 构建提示词
     char prompt_text[128] = {0};
@@ -179,7 +179,7 @@ void coze_send_request(float temp, float humid) {
     // 设置请求头
     char auth_header[1024] = {0};
     snprintf(auth_header, sizeof(auth_header), "Bearer %s", COZE_TOKEN);
-    esp_http_client_set_header(client, "Host", "cfq6w5hsx2.coze.site");
+    esp_http_client_set_header(client, "Host", "pcgrcsptjq.coze.site");
     esp_http_client_set_header(client, "Authorization", auth_header);
     esp_http_client_set_header(client, "Content-Type", "application/json");
     esp_http_client_set_header(client, "Accept", "text/event-stream");
