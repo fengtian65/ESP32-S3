@@ -31,6 +31,7 @@ ESP32-S3/
 │   ├── 08-PWM/           # PWM呼吸灯
 │   ├── 09-UART/          # UART串口通信
 │   ├── 10-using-tem/     # DHT11温湿度传感器基础数据读取
+│   ├── 11-MPU6050/       # I2C通信与MPU6050六轴传感器
 │   ├── ESP-DL-test/      # ESP-DL深度学习库基础测试例程
 │   ├── OLED1(developing)/# OLED 屏驱动（开发中）
 │   └── WIFI(developing)/ # WiFi 联网功能（开发中）
@@ -59,7 +60,7 @@ ESP32-S3/
 
 - **开发板**：ESP32-S3 核心板（推荐 ESP32-S3-DevKitC-1）
 - **基础元器件**：LED、按键、蜂鸣器、OLED 屏（SSD1306）、杜邦线若干
-- **温湿度相关例程元器件**：DHT11温湿度传感器（10-using-tem、tem项目专用）、轻触按键（或直接使用开发板BOOT键）
+- **传感器相关**：MPU6050六轴传感器（10-I2C-MPU6050例程专用）、DHT11温湿度传感器（11-using-tem、tem项目专用）、轻触按键（或直接使用开发板BOOT键）
 - **调试器**：USB 数据线（支持数据传输）
 
 ---
@@ -149,6 +150,7 @@ cd ESP32-S3
 - [ESP32-S3开发教程7：PWM呼吸灯](https://blog.csdn.net/fengtian65/article/details/158541436)
 - [ESP32-S3开发教程8：UART串口通信](https://blog.csdn.net/fengtian65/article/details/158582354)
 - [ESP32-S3开发教程9：扣子智能体快速搭建与API调用例程使用讲解](https://blog.csdn.net/fengtian65/article/details/158932785)
+- [ESP32-S3开发教程10：I2C与MPU6050](https://blog.csdn.net/fengtian65/article/details/159156165)
 
 ---
 
@@ -164,7 +166,8 @@ cd ESP32-S3
 
 ## 📝 更新日志
 
-- **2026-03-11**：新增`10-using-tem`温湿度基础读取例程、`ESP-DL-test`深度学习测试例程；补充温湿度AI实战项目完整CSDN使用教程；更新项目目录结构，补全仓库文件层级说明
+- **2026-03-17**：新增`10-I2C-MPU6050`I2C通信与MPU6050六轴传感器例程；补充配套CSDN教程链接；更新项目目录结构
+- **2026-03-11**：新增`11-using-tem`温湿度基础读取例程、`ESP-DL-test`深度学习测试例程；补充温湿度AI实战项目完整CSDN使用教程；更新项目目录结构，补全仓库文件层级说明
 - **2026-03-08**：完善`project/tem`温湿度AI项目文档，补充配置说明、硬件接线、排错技巧
 - **2026-03-06**：新增「UART串口通信」例程，优化项目目录结构，拆分基础例程与进阶实战项目
 - **2026-03-02**：新增「PWM呼吸灯」例程与配套教程
