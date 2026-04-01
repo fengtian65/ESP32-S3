@@ -32,9 +32,10 @@ ESP32-S3/
 │   ├── 09-UART/          # UART串口通信
 │   ├── 10-using-tem/     # DHT11温湿度传感器基础数据读取
 │   ├── 11-MPU6050/       # I2C通信与MPU6050六轴传感器
+│   ├── 12-log/            # 日志系统
+│   ├── 13-WIFI/           # WiFi 联网功能
 │   ├── ESP-DL-test/      # ESP-DL深度学习库基础测试例程
-│   ├── OLED1(developing)/# OLED 屏驱动（开发中）
-│   └── WIFI(developing)/ # WiFi 联网功能（开发中）
+│   └── OLED1(developing)/# OLED 屏驱动（开发中）
 ├── introduce/            # 实验室介绍文档
 │   └── README.md         # 实验室介绍文档
 ├── PPT/                  # 配套教学幻灯片
@@ -152,6 +153,7 @@ cd ESP32-S3
 - [ESP32-S3开发教程9：扣子智能体快速搭建与API调用例程使用讲解](https://blog.csdn.net/fengtian65/article/details/158932785)
 - [ESP32-S3开发教程10：I2C与MPU6050](https://blog.csdn.net/fengtian65/article/details/159156165)
 - [ESP32-S3开发教程11：日志系统](https://blog.csdn.net/fengtian65/article/details/159392944)
+- [ESP32-S3开发教程12：新增教程](https://blog.csdn.net/fengtian65/article/details/159716678)
 
 ---
 
@@ -167,6 +169,7 @@ cd ESP32-S3
 
 ## 📝 更新日志
 
+- **2026-04-01**：新增ESP32-S3开发教程12：新增教程；补充配套CSDN教程链接
 - **2026-04-01**：新增ESP32-S3开发教程11：日志系统；补充配套CSDN教程链接
 - **2026-03-17**：新增`11-MPU6050`I2C通信与MPU6050六轴传感器例程；补充配套CSDN教程链接；更新项目目录结构
 - **2026-03-11**：新增`10-using-tem`温湿度基础读取例程、`ESP-DL-test`深度学习测试例程；补充温湿度AI实战项目完整CSDN使用教程；更新项目目录结构，补全仓库文件层级说明
