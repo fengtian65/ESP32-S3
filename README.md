@@ -43,13 +43,21 @@ ESP32-S3/
 │   ├── 1开发环境搭建.pptx
 │   └── 2-GPIO输出（点亮一个LED）.pptx
 ├── project/              # 进阶实战项目
-│   └── tem/              # 温湿度采集+扣子Coze AI智能体实战项目
-│       ├── button.c/h    # 按键中断与消抖处理模块
-│       ├── coze_api.c/h  # Coze智能体API调用（流式SSE解析）模块
-│       ├── dht11.c/h     # DHT11温湿度采集模块
-│       ├── main.c        # 主任务调度（WiFi+按键+温湿度+API整合）
-│       ├── test.py       # Coze API本地可用性验证脚本
-│       └── wifi_conn.c/h # WiFi连接与重连模块
+│   ├── tem/              # 温湿度采集+扣子Coze AI智能体实战项目
+│   │   ├── button.c/h    # 按键中断与消抖处理模块
+│   │   ├── coze_api.c/h  # Coze智能体API调用（流式SSE解析）模块
+│   │   ├── dht11.c/h     # DHT11温湿度采集模块
+│   │   ├── main.c        # 主任务调度（WiFi+按键+温湿度+API整合）
+│   │   ├── test.py       # Coze API本地可用性验证脚本
+│   │   └── wifi_conn.c/h # WiFi连接与重连模块
+│   └── MPU6050-test/     # MPU6050六轴传感器测试项目
+│       ├── main/          # 主代码目录
+│       │   ├── CMakeLists.txt # 项目构建文件
+│       │   ├── main.c        # 主任务调度
+│       │   ├── mpu6050.c     # MPU6050传感器实现
+│       │   └── mpu6050.h     # MPU6050传感器头文件
+│       ├── receive_data.py    # 数据接收脚本
+│       └── visualize_data.py  # 数据可视化脚本
 ├── esp-dl/               # ESP-DL深度学习库官方依赖文件
 ├── LICENSE               # 开源协议
 └── README.md             # 项目主说明文档
@@ -169,6 +177,7 @@ cd ESP32-S3
 
 ## 📝 更新日志
 
+- **2026-04-01**：更新README.md，添加MPU6050-test目录下的Python脚本到文档中
 - **2026-04-01**：新增ESP32-S3开发教程12：新增教程；补充配套CSDN教程链接
 - **2026-04-01**：新增ESP32-S3开发教程11：日志系统；补充配套CSDN教程链接
 - **2026-03-17**：新增`11-MPU6050`I2C通信与MPU6050六轴传感器例程；补充配套CSDN教程链接；更新项目目录结构
