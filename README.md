@@ -151,6 +151,7 @@ cd ESP32-S3
 - [ESP32-S3开发教程8：UART串口通信](https://blog.csdn.net/fengtian65/article/details/158582354)
 - [ESP32-S3开发教程9：扣子智能体快速搭建与API调用例程使用讲解](https://blog.csdn.net/fengtian65/article/details/158932785)
 - [ESP32-S3开发教程10：I2C与MPU6050](https://blog.csdn.net/fengtian65/article/details/159156165)
+- [ESP32-S3开发教程11：日志系统](https://blog.csdn.net/fengtian65/article/details/159392944)
 
 ---
 
@@ -166,6 +167,7 @@ cd ESP32-S3
 
 ## 📝 更新日志
 
+- **2026-04-01**：新增ESP32-S3开发教程11：日志系统；补充配套CSDN教程链接
 - **2026-03-17**：新增`11-MPU6050`I2C通信与MPU6050六轴传感器例程；补充配套CSDN教程链接；更新项目目录结构
 - **2026-03-11**：新增`10-using-tem`温湿度基础读取例程、`ESP-DL-test`深度学习测试例程；补充温湿度AI实战项目完整CSDN使用教程；更新项目目录结构，补全仓库文件层级说明
 - **2026-03-08**：完善`project/tem`温湿度AI项目文档，补充配置说明、硬件接线、排错技巧
