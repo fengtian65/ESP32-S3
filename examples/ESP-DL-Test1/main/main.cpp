@@ -36,11 +36,11 @@ extern "C" void app_main(void)
     ESP_LOGI(TAG, "\nESP-DL Version: 3.2.4");
     ESP_LOGI(TAG, "Commit: 7089b94a76206825bddba57a6385d46cc08c0a6b");
 
-    // 强制设置 param_copy = true，避免直接访问 FLASH/PSRAM
-    bool param_copy = true;
+    // 直接访问 FLASH/PSRAM 中的参数
+    bool param_copy = false;
     size_t psram_size = heap_caps_get_total_size(MALLOC_CAP_SPIRAM);
     ESP_LOGI(TAG, "PSRAM size: %zu bytes", psram_size);
-    ESP_LOGI(TAG, "Forcing param_copy=true to avoid direct FLASH/PSRAM access");
+    ESP_LOGI(TAG, "param_copy=false, accessing parameters directly from FLASH/PSRAM");
 
     ESP_LOGI(TAG, "\nTest: Creating Model directly...");
     Model *model = nullptr;
